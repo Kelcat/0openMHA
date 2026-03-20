@@ -70,7 +70,7 @@ Default values are set and MHA configuration variables registered into the parse
 */
 fftfb_interface_t::fftfb_interface_t(MHA_AC::algo_comm_t & iac,
                                      const std::string & configured_name)
-    : MHAPlugin::plugin_t<fftfb_plug_t>("FFT based filterbank with overlapping filters",iac),
+    : MHAPlugin::plugin_t<fftfb_plug_t>("FFT overlap-save filterbank with overlapping filters",iac),
       MHAOvlFilter::overlap_save_filterbank_t::vars_t(static_cast<MHAParser::parser_t&>(*this)),
       return_imag("Return imaginary part? Results are stored in AC variable '<plugname>_imag'.","no"),
       nchannels(ac, configured_name + "_nchannels"),
@@ -222,12 +222,16 @@ MHAPLUGIN_DOCUMENTATION\
 (fftfilterbank,
  "filterbank",
  "This plugin implements a linear phase filterbank based on FFT spectrum."
- " Each filter\n"
- "bank channel is stored into an own audio channel. The number of output\n"
- "channels of this plugin is the number of frequency bands times the\n"
- "number of input channels.\n"
- "\n"
- "Please use the iFFT plugin {\\em spec2wave}"
+  " Each filter\n"
+  "bank channel is stored into an own audio channel. The number of output\n"
+  "channels of this plugin is the number of frequency bands times the\n"
+  "number of input channels.\n"
+  "\n"
+  "The waveform-domain implementation uses an FFT overlap-save filterbank.\n"
+  "It does not implement a time-folding/polyphase WOLA analysis stage\n"
+  "before the FFT.\n"
+  "\n"
+  "Please use the iFFT plugin {\\em spec2wave}"
  " (p. \\pageref{plug:spec2wave}) to get the\n"
  "waveform signal of the filterbank output. The {\\em matrixmixer}\n"
  "(p. \\pageref{plug:matrixmixer})\n"
